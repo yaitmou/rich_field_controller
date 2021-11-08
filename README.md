@@ -2,7 +2,7 @@ A Flutter plugin that turn the well known TextField into a true rich text editin
 
 <p>
   <img src="https://github.com/yaitmou/rich_field_controller/blob/main/doc/intro.gif?raw=true"
-    alt="An animated image of a TextField turned into a rich TextField" height="200"/>
+    alt="An animated image of a TextField turned into a rich TextField" />
   
 </p>
 
