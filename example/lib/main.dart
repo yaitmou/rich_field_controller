@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
-import 'package:rich_field_example/selection_controls.dart';
-import 'package:rich_field_example/toolbar.dart';
+import './selection_controls.dart';
+import './toolbar.dart';
 
 /// This example illustrates how to use a [RichTextController] with a [TextField]
 /// to turn it into a rich text input field
