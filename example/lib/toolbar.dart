@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class ReditorToolBarExample extends StatefulWidget {
+class RichfieldToolBarExample extends StatefulWidget {
   final Function(TextStyle)? onAction;
-  const ReditorToolBarExample({Key? key, this.onAction}) : super(key: key);
+  const RichfieldToolBarExample({Key? key, this.onAction}) : super(key: key);
 
   @override
-  _ReditorToolBarExampleState createState() => _ReditorToolBarExampleState();
+  _RichfieldToolBarExampleState createState() => _RichfieldToolBarExampleState();
 }
 
-class _ReditorToolBarExampleState extends State<ReditorToolBarExample> {
+class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
   Function(TextStyle)? get onAction => widget.onAction;
 
   @override

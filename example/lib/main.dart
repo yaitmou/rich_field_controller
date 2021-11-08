@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
-import 'package:reditor_example/selection_controls.dart';
-import 'package:reditor_example/toolbar.dart';
+import 'package:richField_example/selection_controls.dart';
+import 'package:richField_example/toolbar.dart';
 
 /// This example illustrates how to use a [RichTextController] with a [TextField]
 /// to turn it into a rich text input field
 void main() {
-  runApp(const ReditorExample());
+  runApp(const RichFieldExample());
 }
 
-class ReditorExample extends StatelessWidget {
-  const ReditorExample({Key? key}) : super(key: key);
+class RichFieldExample extends StatelessWidget {
+  const RichFieldExample({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            ReditorToolBarExample(
+            RichfieldToolBarExample(
               onAction: (textStyle) {
                 // If we want to keep the text selected after styling
                 _controller.selection = _controller.paragraph.selection;
