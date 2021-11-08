@@ -1,3 +1,8 @@
+<p align="center">
+<a href="https://pub.dev/packages/rich_field_controller"><img src="https://img.shields.io/pub/v/rich_field_controller.svg" alt="Pub"></a>
+<a href="https://github.com/yaitmou/rich_field_controller.git"><img src="https://github.com/yaitmou/rich_field_controller.git" alt="build"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+</p>
 A Flutter plugin that turns the well-known TextField into a rich text editing field.
 
 <p>
@@ -68,10 +73,10 @@ A `FocusNode` is required by the `RichFieldController` so that it can keep track
 
 ### Updating a style programmatically
 
-As long as you provide a `RichFieldSelectionControls`, you can update the text style from anywhere in your code by calling the `updateActiveElementStyle(TextStyle textStyle)` function.
+As long as you provide a `RichFieldSelectionControls`, you can update the text style from anywhere in your code by calling the `updateSelectedTextStyle(TextStyle textStyle)` function.
 
 ```dart
-controller.paragraph.updateActiveElementStyle(newStyle);
+controller.paragraph.updateSelectedTextStyle(newStyle);
 ```
 
-We have added the `RichFieldSelectionControls` to cover the basic styling (bold, italic, underline, strickThrough). Under the hood, it uses the `updateActiveElementStyle(TextStyle textStyle)` to apply styles.
+For demonstration purposes, we have added the `RichFieldSelectionControls` to cover the basic styling (bold, italic, underline, strickThrough). Under the hood, it extends the `MaterialTextSelectionControls` and uses the `updateSelectedTextStyle(TextStyle textStyle)` to apply styles. For your Flutter app, you may want to implement your own `TextSelectionControls` to provide the styles you need.

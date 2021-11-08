@@ -133,7 +133,7 @@ class RichParagraph {
   /// Update active element [style]s list
   ///
   /// This is the main method that is called from toolbar and context menu actions
-  void updateActiveElementStyle(TextStyle style) {
+  void updateSelectedTextStyle(TextStyle style) {
     node.requestFocus();
     // Make sure we have something to style!
     if (_selectedElements.isNotEmpty) {

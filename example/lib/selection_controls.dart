@@ -10,7 +10,7 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
   RichFieldSelectionControls(this.context, this.controller);
 
   void _updateTextStyle(TextSelectionDelegate delegate, TextStyle newStyle) {
-    controller.paragraph.updateActiveElementStyle(newStyle);
+    controller.paragraph.updateSelectedTextStyle(newStyle);
     delegate.bringIntoView(delegate.textEditingValue.selection.extent);
     delegate.hideToolbar();
   }

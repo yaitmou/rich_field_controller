@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
                 // If we want to keep the text selected after styling
                 _controller.selection = _controller.paragraph.selection;
                 // Apply [textStyle] to the paragraph's selection
-                _controller.paragraph.updateActiveElementStyle(textStyle);
+                _controller.paragraph.updateSelectedTextStyle(textStyle);
               },
             ),
             Center(
