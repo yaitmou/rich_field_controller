@@ -1,0 +1,44 @@
+name: reditor_example
+description: A demo app showcasing the rich_field_controller package in action.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  rich_field_controller:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand/Quicksand-Light.ttf
+          weight: 300
+          style: normal
+        - asset: fonts/Quicksand/Quicksand-Regular.ttf
+          weight: 400
+          style: normal
+        - asset: fonts/Quicksand/Quicksand-Medium.ttf
+          weight: 500
+          style: normal
+        - asset: fonts/Quicksand/Quicksand-SemiBold.ttf
+          weight: 600
+          style: normal
+        - asset: fonts/Quicksand/Quicksand-Bold.ttf
+          weight: 700
+          style: normal
+    - family: Codicons
+      fonts:
+        - asset: fonts/Codicons.ttf
