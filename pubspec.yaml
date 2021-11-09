@@ -1,6 +1,6 @@
 name: rich_field_controller
 description: A rich text field controller to be used with Flutter TextField.
-version: 0.1.0
+version: 0.1.1
 repository: "https://github.com/yaitmou/rich_field_controller.git"
 homepage: "https://github.com/yaitmou/rich_field_controller.git"
 
@@ -13,7 +13,6 @@ dependencies:
   equatable: ^2.0.3
   flutter:
     sdk: flutter
-  flutter_markdown: ^0.6.7
 
 dev_dependencies:
   flutter_lints: ^1.0.0
