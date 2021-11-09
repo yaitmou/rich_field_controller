@@ -24,6 +24,7 @@ class RichParagraph {
   get selectedElements => _selectedElements;
 
   Set<RichStyle> _styles = {};
+  get styles => _styles;
 
   List<InlineSpan>? _spans;
 
@@ -32,15 +33,6 @@ class RichParagraph {
 
   TextSelection? _selection;
   get selection => _selection;
-
-  void updateSelection(TextSelection newSelection) {
-    // Make sure we have something selected
-    if (newSelection.isValid) {
-      _selection = newSelection;
-      _cursorPosition = _selection!.baseOffset;
-      _setActiveElement();
-    }
-  }
 
   /// Sets the [_elements] to be styled
   void _setActiveElement() {
@@ -94,30 +86,6 @@ class RichParagraph {
     }
   }
 
-  /// Get newly added text and update the [_element]s buffer
-  ///
-  /// This is called on every text change of the textField
-  void updateText(String newText) {
-    _updateStylesRange(newText);
-    _elements.clear();
-    int elementStart = -1;
-
-    newText.splitMapJoin(
-      '',
-      onNonMatch: (s) {
-        _addElement(s, elementStart);
-        elementStart++;
-        return s;
-      },
-    );
-
-    _text = newText;
-
-    if (_text.isEmpty) {
-      _styles.clear();
-    }
-  }
-
   /// Since the `_styles` buffer acts like a mask on top of the text, we need
   /// to update its entries to keep them in sync with the underlying text.
   void _updateStylesRange(String newText) {
@@ -149,6 +117,39 @@ class RichParagraph {
       }
       return s;
     }).toSet();
+  }
+
+  void updateSelection(TextSelection newSelection) {
+    // Make sure we have something selected
+    if (newSelection.isValid) {
+      _selection = newSelection;
+      _cursorPosition = _selection!.baseOffset;
+      _setActiveElement();
+    }
+  }
+
+  /// Get newly added text and update the [_element]s buffer
+  ///
+  /// This is called on every text change of the textField
+  void updateText(String newText) {
+    _updateStylesRange(newText);
+    _elements.clear();
+    int elementStart = -1;
+
+    newText.splitMapJoin(
+      '',
+      onNonMatch: (s) {
+        _addElement(s, elementStart);
+        elementStart++;
+        return s;
+      },
+    );
+
+    _text = newText;
+
+    if (_text.isEmpty) {
+      _styles.clear();
+    }
   }
 
   /// Update active element [style]s list
