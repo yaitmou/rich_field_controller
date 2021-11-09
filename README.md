@@ -5,7 +5,7 @@
 
 </p>
 
-A Flutter plugin that turns a TextField into wysiwyg field.
+A Flutter plugin that turns a TextField into a wysiwyg field.
 
 **What does it do:**
 
@@ -18,9 +18,9 @@ A Flutter plugin that turns a TextField into wysiwyg field.
 
 ## Usage
 
-This plugin inherits form `TextEditingController`. Therefore, whenever you want to turn a TextField into a wysiwyg, all you have to do is set its controller to be an instance of `RichTextFieldController`.
+This plugin inherits form `TextEditingController`. Therefore, whenever you want to turn a TextField into a wysiwyg, all you have to do is to set its controller to be an instance of `RichTextFieldController`.
 
-> The code below is extract from the provided example. Check the examples folder for the complete code.
+> The code below is extracted from the provided example. Check the examples folder for the complete code.
 
 ```dart
 import 'package:rich_field_controller/rich_field_controller.dart';
@@ -57,12 +57,10 @@ Class Example {
 }
 ```
 
-> Remember to dispose of the `RichFieldController` in your widget's `dispose` method
-
 ### Updating text style
 
-To update a text style, invoke the `void updateStyle(TextStyle textStyle)` method on the `RichFieldController` instance. In the provided example, this method is extensively used by the `RichfieldToolBarExample` widget to apply styles on the selected text. The `RichFieldController` is completely uncoupled form the toolbar. Therefore, you can crate and style your own toolbar the way you please. Then, invoke the `updateStyle` method in the toolbar actions accordingly.
-Here is snipped showing how to **bold** from a `GestureDetector` widget:
+To update a text style, invoke the `void updateStyle(TextStyle textStyle)` method on the `RichFieldController` instance. In the provided example, this method is extensively used by the `RichfieldToolBarExample` widget. The `RichFieldController` is completely uncoupled form the toolbar. Therefore, you can crate and style your own toolbar the way you please. Then, invoke the `updateStyle` method from the toolbar's actions accordingly.
+Here is snipped showing how to **bold** a selected text from a `GestureDetector` widget:
 
 ```dart
 GestureDetector(
@@ -72,8 +70,10 @@ GestureDetector(
 )
 ```
 
-For demonstration purposes, we have added the `RichFieldSelectionControls` to cover the basic styling (bold, italic, underline, strickThrough). Under the hood, it extends the `MaterialTextSelectionControls` and uses the `updateSelectedTextStyle(TextStyle textStyle)` to apply styles. For your Flutter app, you may want to implement your own `TextSelectionControls` to provide the styles you need.
+### RichFieldSelectionControls (optional)
+
+For demonstration purposes, we have added the `RichFieldSelectionControls` to cover the basic styling (bold, italic, underline, strickThrough). Under the hood, it extends the `MaterialTextSelectionControls` and uses the `updateStyle(TextStyle textStyle)` method to apply styles. In your Flutter app, you may want to implement your own `TextSelectionControls` to apply the styles you need.
 
 ### FocusNode
 
-If you provide a `focusNode` argument to the `RichFieldController`, the corresponding `TextField` widget will keep focus while being styled. That is particularly useful when you use a toolbar.
+If you provide a `focusNode` argument to the `RichFieldController`, the corresponding `TextField` widget will keep focus while being styled. That is particularly handy when you use a toolbar.
