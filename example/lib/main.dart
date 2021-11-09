@@ -31,7 +31,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late final FocusNode _fieldNode;
+  late final FocusNode _fieldFocusNode;
   late final RichFieldController _controller;
   // This is for demonstration only. You can define your own [TextSelectionControl]
   // and inject a [RichFieldController] in it to access the styling properties
@@ -40,15 +40,15 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _fieldNode = FocusNode();
-    _controller = RichFieldController(_fieldNode);
+    _fieldFocusNode = FocusNode();
+    _controller = RichFieldController(focusNode: _fieldFocusNode);
     _selectionControls = RichFieldSelectionControls(context, _controller);
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _fieldNode.dispose();
+    _fieldFocusNode.dispose();
     super.dispose();
   }
 
@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                 ),
                 child: TextField(
                   controller: _controller,
-                  focusNode: _fieldNode,
+                  focusNode: _fieldFocusNode,
                   maxLines: null,
 
                   // Use the style property to set a default style

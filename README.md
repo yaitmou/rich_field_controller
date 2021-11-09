@@ -5,7 +5,7 @@
 
 </p>
 
-A Flutter plugin that turns the well-known TextField into a rich text editing field.
+A Flutter plugin that turns a TextField into wysiwyg field.
 
 **What does it do:**
 
@@ -14,11 +14,11 @@ A Flutter plugin that turns the well-known TextField into a rich text editing fi
     alt="An animated image of a TextField turned into a rich TextField" />
 </p>
 
-> This plugin is still under development. Contributors are most welcome ;)
+> This plugin is still under development. So, Contributors are most welcome ;)
 
 ## Usage
 
-This plugin inherits form TextEditingController. Therefore, whenever you want to turn a TextField into a rich TextField, all you have to do is set its controller to be an instance of RichTextFieldController.
+This plugin inherits form `TextEditingController`. Therefore, whenever you want to turn a TextField into a wysiwyg, all you have to do is set its controller to be an instance of `RichTextFieldController`.
 
 > The code below is extract from the provided example. Check the examples folder for the complete code.
 
@@ -26,9 +26,6 @@ This plugin inherits form TextEditingController. Therefore, whenever you want to
 import 'package:rich_field_controller/rich_field_controller.dart';
 
 Class Example {
-  // A FocusNode is required to keep track of the selected text
-  // That is particularly true when using a toolbar
-  late final FocusNode _fieldNode;
   late final RichFieldController _controller;
   // This is provided for quick integration of common styling.
   // You can use a custom SelectionControls or a MaterialSelectionControls, etc..
@@ -37,7 +34,6 @@ Class Example {
   @override
   void initState() {
     super.initState();
-    _fieldNode = FocusNode();
     _controller = RichFieldController(_fieldNode);
     _selectionControls = RichFieldSelectionControls(context, _controller);
   }
@@ -47,39 +43,37 @@ Class Example {
     return Container(
       child: TextField(
         controller: _controller,
-        focusNode: _fieldNode,
         selectionControls: _selectionControls,
       ),
     );
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
 }
 ```
 
-> Remember to dispose both the `FocusNode` and the `RichFieldController` in your widget's dispose method
->
-> ```dart
-> //...
-> @override
->   void dispose() {
->     _controller.dispose();
->     _fieldNode.dispose();
->     super.dispose();
->   }
-> //...
->
-> ```
+> Remember to dispose of the `RichFieldController` in your widget's `dispose` method
 
-### FocusNode()
+### Updating text style
 
-A `FocusNode` is required by the `RichFieldController` so that it can keep track of what text is being edited.
-
-### Updating a style programmatically
-
-As long as you provide a `RichFieldSelectionControls`, you can update the text style from anywhere in your code by calling the `updateSelectedTextStyle(TextStyle textStyle)` method.
+To update a text style, invoke the `void updateStyle(TextStyle textStyle)` method on the `RichFieldController` instance. In the provided example, this method is extensively used by the `RichfieldToolBarExample` widget to apply styles on the selected text. The `RichFieldController` is completely uncoupled form the toolbar. Therefore, you can crate and style your own toolbar the way you please. Then, invoke the `updateStyle` method in the toolbar actions accordingly.
+Here is snipped showing how to **bold** from a `GestureDetector` widget:
 
 ```dart
-controller.paragraph.updateSelectedTextStyle(newStyle);
+GestureDetector(
+  onTap: (){
+    controller.updateStyle(const TextStyle(fontWeight: FontWeight.bold));
+  }
+)
 ```
 
 For demonstration purposes, we have added the `RichFieldSelectionControls` to cover the basic styling (bold, italic, underline, strickThrough). Under the hood, it extends the `MaterialTextSelectionControls` and uses the `updateSelectedTextStyle(TextStyle textStyle)` to apply styles. For your Flutter app, you may want to implement your own `TextSelectionControls` to provide the styles you need.
+
+### FocusNode
+
+If you provide a `focusNode` argument to the `RichFieldController`, the corresponding `TextField` widget will keep focus while being styled. That is particularly useful when you use a toolbar.

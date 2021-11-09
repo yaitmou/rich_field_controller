@@ -6,10 +6,10 @@ import 'package:rich_field_controller/src/rich_paragraph.dart';
 /// Takes a [FocusNode] to keep focus on the text being edited.
 /// That is particularly useful when using a toolbar to style the selected text
 class RichFieldController extends TextEditingController {
-  FocusNode node;
-  RichFieldController(this.node);
+  FocusNode? focusNode;
+  RichFieldController({this.focusNode});
 
-  late final _paragraph = RichParagraph(node);
+  late final _paragraph = RichParagraph(node: focusNode);
 
   // RichParagraph get paragraph => _paragraph;
   void updateStyle(TextStyle style) {

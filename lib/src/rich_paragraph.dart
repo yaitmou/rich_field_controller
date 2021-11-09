@@ -10,8 +10,8 @@ import 'package:rich_field_controller/src/style.dart';
 /// The [RichParagraph] splits the content of a `TextField` into single characters.
 /// Then it create a
 class RichParagraph {
-  final FocusNode node;
-  RichParagraph(this.node);
+  final FocusNode? node;
+  RichParagraph({this.node});
 
   String _text = '';
 
@@ -155,7 +155,9 @@ class RichParagraph {
   ///
   /// This is the main method that is called from toolbar and context menu actions
   void updateSelectedTextStyle(TextStyle style) {
-    node.requestFocus();
+    if (node != null) {
+      node!.requestFocus();
+    }
     // Make sure we have something to style!
     if (_selectedElements.isNotEmpty) {
       // If we have selected more than one element, we need to sync all
