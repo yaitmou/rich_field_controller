@@ -30,6 +30,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ matrix.flutter_version }}
+          version: 2.5.3
       - run: flutter analyze
       - run: flutter format --dry-run --set-exit-if-changed .
       - run: flutter test
