@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:rich_field_controller/rich_field_controller.dart';
 
 class RichfieldToolBarExample extends StatefulWidget {
-  final Function(TextStyle)? onAction;
-  const RichfieldToolBarExample({Key? key, this.onAction}) : super(key: key);
+  final RichFieldController conroller;
+  const RichfieldToolBarExample(
+    this.conroller, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   _RichfieldToolBarExampleState createState() => _RichfieldToolBarExampleState();
 }
 
 class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
-  Function(TextStyle)? get onAction => widget.onAction;
+  RichFieldController get conroller => widget.conroller;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +34,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8).copyWith(left: 0),
                   child: GestureDetector(
                     onTap: () {
-                      if (onAction != null) {
-                        onAction!(const TextStyle(fontWeight: FontWeight.bold));
-                      }
+                      conroller.updateStyle(const TextStyle(fontWeight: FontWeight.bold));
                     },
                     child: const Icon(
                       Icons.format_bold_rounded,
@@ -51,9 +53,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      if (onAction != null) {
-                        onAction!(const TextStyle(fontStyle: FontStyle.italic));
-                      }
+                      conroller.updateStyle(const TextStyle(fontStyle: FontStyle.italic));
                     },
                     child: const Icon(
                       Icons.format_italic_rounded,
@@ -72,9 +72,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      if (onAction != null) {
-                        onAction!(const TextStyle(decoration: TextDecoration.underline));
-                      }
+                      conroller.updateStyle(const TextStyle(decoration: TextDecoration.underline));
                     },
                     child: const Icon(
                       Icons.format_underline_rounded,
@@ -93,9 +91,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      if (onAction != null) {
-                        onAction!(const TextStyle(decoration: TextDecoration.lineThrough));
-                      }
+                      conroller.updateStyle(const TextStyle(decoration: TextDecoration.lineThrough));
                     },
                     child: const Icon(
                       Icons.format_strikethrough_rounded,

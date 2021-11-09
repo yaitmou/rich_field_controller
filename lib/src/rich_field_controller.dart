@@ -11,7 +11,11 @@ class RichFieldController extends TextEditingController {
 
   late final _paragraph = RichParagraph(node);
 
-  RichParagraph get paragraph => _paragraph;
+  // RichParagraph get paragraph => _paragraph;
+  void updateStyle(TextStyle style) {
+    selection = _paragraph.selection;
+    _paragraph.updateSelectedTextStyle(style);
+  }
 
   @override
   set value(TextEditingValue newValue) {
@@ -21,7 +25,9 @@ class RichFieldController extends TextEditingController {
 
   @override
   TextSpan buildTextSpan({required BuildContext context, TextStyle? style, required bool withComposing}) {
-    _paragraph.updateSelection(selection);
+    if (selection != _paragraph.selection) {
+      _paragraph.updateSelection(selection);
+    }
     return TextSpan(style: style, children: _paragraph.buildTextSpans());
   }
 }

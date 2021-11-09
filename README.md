@@ -14,7 +14,7 @@ A Flutter plugin that turns the well-known TextField into a rich text editing fi
     alt="An animated image of a TextField turned into a rich TextField" />
 </p>
 
-> This plugin is still under development. It should work as-is, however, new features may be added in a near future. Contributors are most welcome ;)
+> This plugin is still under development. Contributors are most welcome ;)
 
 ## Usage
 
@@ -56,7 +56,7 @@ Class Example {
 }
 ```
 
-> Remember to dispose both the `FocusNode` and the `RichFieldController` in your widget's dispose function
+> Remember to dispose both the `FocusNode` and the `RichFieldController` in your widget's dispose method
 >
 > ```dart
 > //...
@@ -76,7 +76,7 @@ A `FocusNode` is required by the `RichFieldController` so that it can keep track
 
 ### Updating a style programmatically
 
-As long as you provide a `RichFieldSelectionControls`, you can update the text style from anywhere in your code by calling the `updateSelectedTextStyle(TextStyle textStyle)` function.
+As long as you provide a `RichFieldSelectionControls`, you can update the text style from anywhere in your code by calling the `updateSelectedTextStyle(TextStyle textStyle)` method.
 
 ```dart
 controller.paragraph.updateSelectedTextStyle(newStyle);

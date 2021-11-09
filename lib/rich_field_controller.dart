@@ -7,4 +7,4 @@ library rich_field;
 
 // export 'src/reditor.dart';
 export 'src/rich_field_controller.dart';
-export 'src/rich_paragraph.dart';
+export 'src/rich_field_selection_controls.dart';

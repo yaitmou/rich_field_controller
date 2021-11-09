@@ -16,16 +16,19 @@ class RichParagraph {
   String _text = '';
 
   Set<RichElement> _elements = {};
+  get elements => _elements;
 
   final Set<RichElement> _curatedElements = {};
 
   List<RichElement> _selectedElements = [];
+  get selectedElements => _selectedElements;
 
   Set<RichStyle> _styles = {};
 
   List<InlineSpan>? _spans;
 
   int? _cursorPosition;
+  get cursorPosition => _cursorPosition;
 
   TextSelection? _selection;
   get selection => _selection;
@@ -39,13 +42,29 @@ class RichParagraph {
     }
   }
 
-  /// Sets the [elements] to be styled
+  /// Sets the [_elements] to be styled
   void _setActiveElement() {
     _selectedElements.clear();
     if (_selection!.isCollapsed) {
-      final _activeElement = _elements.singleWhereOrNull((e) => e.start <= _cursorPosition! && e.end >= _cursorPosition!);
-      if (_activeElement != null) {
-        _selectedElements = [_activeElement];
+      // scan backward until we hit a space character
+      for (var i = _cursorPosition! - 1; i >= 0 && i < _elements.length; i--) {
+        final e = _elements.elementAt(i);
+        if (e.text == ' ') {
+          break;
+        }
+        if (e.start == i) {
+          _selectedElements.add(e);
+        }
+      }
+      // scan forward until we hit a space character
+      for (var i = _cursorPosition!; i < _elements.length; i++) {
+        final e = _elements.elementAt(i);
+        if (e.text == ' ') {
+          break;
+        }
+        if (e.start == i) {
+          _selectedElements.add(e);
+        }
       }
     } else {
       // Account for when we select by dragging from left to right and vice vers ca
@@ -67,10 +86,12 @@ class RichParagraph {
     var el = RichElement(text: text, start: start);
     // look for a style that matches the element's position
     final s = _styles.singleWhereOrNull((s) => s.start == el.start);
-    if (s != null) {
-      el.style = s;
+    if (el.text != '' && el.start >= 0) {
+      if (s != null) {
+        el.style = s;
+      }
+      _elements.add(el);
     }
-    _elements.add(el);
   }
 
   /// Get newly added text and update the [_element]s buffer
@@ -86,7 +107,7 @@ class RichParagraph {
       onNonMatch: (s) {
         _addElement(s, elementStart);
         elementStart++;
-        return '';
+        return s;
       },
     );
 
@@ -139,41 +160,37 @@ class RichParagraph {
     if (_selectedElements.isNotEmpty) {
       // If we have selected more than one element, we need to sync all
       // their respective styles in regards to this [newStyle]
-      if (_selectedElements.length > 1) {
-        var _isDiscrepancy = false;
-        final elementWithStyle = _selectedElements.firstWhereOrNull((e) => e.style.styles.contains(style));
-        final elementWithoutStyle = _selectedElements.firstWhereOrNull((e) => !e.style.styles.contains(style));
-        _isDiscrepancy = elementWithStyle != null && elementWithoutStyle != null;
-
-        for (var e in _selectedElements) {
-          final newStyle = RichStyle(start: e.start);
-          if (_styles.contains(newStyle)) {
-            // If the style is in the [_styles] buffer that means it's already
-            // linked to an element. Thus, there is no need to link it here again
-            _styles = _styles.map((s) {
-              if (s == newStyle) {
-                // We toggle the style only if there are no discrepancies
-                if (!_isDiscrepancy) {
-                  s.toggleTextStyle(style);
-                } else {
-                  s.addTextStyle(style);
-                }
+      var _isDiscrepancy = false;
+      final elementWithStyle = _selectedElements.firstWhereOrNull((e) => e.style.styles.contains(style));
+      final elementWithoutStyle = _selectedElements.firstWhereOrNull((e) => !e.style.styles.contains(style));
+      _isDiscrepancy = elementWithStyle != null && elementWithoutStyle != null;
+      for (var e in _selectedElements) {
+        final newStyle = RichStyle(start: e.start);
+        if (_styles.contains(newStyle)) {
+          // If the style is in the [_styles] buffer that means it's already
+          // linked to an element. Thus, there is no need to link it here again
+          _styles = _styles.map((s) {
+            if (s == newStyle) {
+              // We toggle the style only if there are no discrepancies
+              if (!_isDiscrepancy) {
+                s.toggleTextStyle(style);
+              } else {
+                s.addTextStyle(style);
               }
-              return s;
-            }).toSet();
-          } else {
-            // If the style is not in the [_styles] buffer that means we need
-            // to add it. Hence, we need to link it to it's corresponding element
-
-            newStyle.toggleTextStyle(style);
-            _styles.add(newStyle);
-            _elements = _elements.map((element) {
-              if (element == e) {
-                element.style = newStyle;
-              }
-              return element;
-            }).toSet();
-          }
+            }
+            return s;
+          }).toSet();
+        } else {
+          // If the style is not in the [_styles] buffer that means we need
+          // to add it. Hence, we need to link it to it's corresponding element
+          newStyle.toggleTextStyle(style);
+          _styles.add(newStyle);
+          _elements = _elements.map((element) {
+            if (element == e) {
+              element.style = newStyle;
+            }
+            return element;
+          }).toSet();
         }
       }
     }
@@ -206,7 +223,6 @@ class RichParagraph {
     }
 
     for (var e in _curatedElements) {
-      // print(e);
       _spans!.add(e.span);
     }
 

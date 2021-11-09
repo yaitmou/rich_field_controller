@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
-import './selection_controls.dart';
 import './toolbar.dart';
 
 /// This example illustrates how to use a [RichTextController] with a [TextField]
@@ -61,14 +60,7 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            RichfieldToolBarExample(
-              onAction: (textStyle) {
-                // If we want to keep the text selected after styling
-                _controller.selection = _controller.paragraph.selection;
-                // Apply [textStyle] to the paragraph's selection
-                _controller.paragraph.updateSelectedTextStyle(textStyle);
-              },
-            ),
+            RichfieldToolBarExample(_controller),
             Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 900),

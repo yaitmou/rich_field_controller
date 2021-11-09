@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:rich_field_controller/src/rich_paragraph.dart';
+import 'package:rich_field_controller/rich_field_controller.dart';
 
 /// Handles the formatting options that show on text selection
 /// when a left clicking on a text
 ///
 class RichFieldSelectionControls extends MaterialTextSelectionControls {
-  final RichParagraph paragraph;
+  final RichFieldController controller;
   final BuildContext context;
 
-  RichFieldSelectionControls(this.context, this.paragraph);
+  RichFieldSelectionControls(this.context, this.controller);
 
   void _updateTextStyle(TextSelectionDelegate delegate, TextStyle newStyle) {
-    paragraph.updateSelectedTextStyle(newStyle);
+    controller.updateStyle(newStyle);
     delegate.bringIntoView(delegate.textEditingValue.selection.extent);
+    delegate.userUpdateTextEditingValue(
+      TextEditingValue(
+        text: delegate.textEditingValue.text,
+        selection: TextSelection.collapsed(offset: delegate.textEditingValue.selection.end),
+      ),
+      SelectionChangedCause.toolBar,
+    );
     delegate.hideToolbar();
   }
 

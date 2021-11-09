@@ -14,13 +14,13 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  flutter-tests:
     name: Test Flutter ${{ matrix.flutter_version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        flutter_version: [stable]
+        flutter_version: [dev, beta] # Disable stable until Null Safety goes stable
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
@@ -30,8 +30,6 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: ${{ matrix.flutter_version }}
-
-      - run: flutter pub get
       - run: flutter analyze
-      # - run: flutter format --dry-run --set-exit-if-changed .
+      - run: flutter format --dry-run --set-exit-if-changed .
       - run: flutter test
