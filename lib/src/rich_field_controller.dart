@@ -13,7 +13,7 @@ class RichFieldController extends TextEditingController {
 
   // RichParagraph get paragraph => _paragraph;
   void updateStyle(TextStyle style) {
-    selection = _paragraph.selection;
+    selection = _paragraph.selection ?? selection;
     _paragraph.updateSelectedTextStyle(style);
   }
 

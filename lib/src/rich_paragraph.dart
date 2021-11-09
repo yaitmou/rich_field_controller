@@ -32,7 +32,7 @@ class RichParagraph {
   get cursorPosition => _cursorPosition;
 
   TextSelection? _selection;
-  get selection => _selection;
+  TextSelection? get selection => _selection;
 
   /// Sets the [_elements] to be styled
   void _setActiveElement() {
