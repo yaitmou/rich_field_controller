@@ -260,8 +260,6 @@ class RichParagraph {
         str += mdOpenings + e.text + mdClosings;
       }
     }
-    print(str);
-    print(_styles);
     return str;
   }
 }

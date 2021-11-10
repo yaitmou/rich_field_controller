@@ -8,7 +8,9 @@ void main() {
     setUp(() {
       element = RichElement(text: 'a', start: 0);
     });
-    test('Merged element should have both text concatenated and the receiver style', () {
+    test(
+        'Merged element should have both text concatenated and the receiver style',
+        () {
       // ARRANGE
       var elementA = RichElement(text: 'a', start: 0);
       var elementB = RichElement(text: 'b', start: 1);
@@ -19,7 +21,9 @@ void main() {
       // ASSERT
       expect(mergedElement, expectedElement);
     });
-    test('Given an element with text `a` and start 0, the initial TextSpan should have the same text and a null TextStyle', () {
+    test(
+        'Given an element with text `a` and start 0, the initial TextSpan should have the same text and a null TextStyle',
+        () {
       // ARRANGE
       const expectedSpan = TextSpan(text: 'a', style: null);
       // ACT

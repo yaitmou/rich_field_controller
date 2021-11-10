@@ -76,7 +76,8 @@ class _HomeState extends State<Home> {
                   maxLines: null,
 
                   // Use the style property to set a default style
-                  style: const TextStyle(fontSize: 18, height: 1.75, color: Colors.black87),
+                  style: const TextStyle(
+                      fontSize: 18, height: 1.75, color: Colors.black87),
                   selectionControls: _selectionControls,
                   autofocus: true,
                   decoration: const InputDecoration(

@@ -12,7 +12,10 @@ void main() {
       });
     });
     test('TextStyle should contain all of the merged styles', () {
-      const expectedTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 24, decoration: TextDecoration.none);
+      const expectedTextStyle = TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+          decoration: TextDecoration.none);
       final textStyle = style.textStyle;
       expect(textStyle, expectedTextStyle);
     });
@@ -23,7 +26,11 @@ void main() {
       expect(textStyle, expectedTextStyle);
     });
     test('Add a TextStyle', () {
-      const expectedTextStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, decoration: TextDecoration.none);
+      const expectedTextStyle = TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          fontStyle: FontStyle.italic,
+          decoration: TextDecoration.none);
       style.addTextStyle(const TextStyle(fontStyle: FontStyle.italic));
       final textStyle = style.textStyle;
       expect(textStyle, expectedTextStyle);
