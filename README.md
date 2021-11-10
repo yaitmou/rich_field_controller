@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://pub.dev/packages/rich_field_controller"><img src="https://img.shields.io/pub/v/rich_field_controller.svg" alt="Pub"></a>
-<a href="https://github.com/yaitmou/rich_field_controller/actions"><img src="https://github.com/yaitmou/rich_field_controller/workflows/rich_field_controller/badge.svg" alt="build"></a>
+<a href="https://github.com/yaitmou/rich_field_controller/actions"><img src="https://img.shields.io/github/workflow/status/yaitmou/rich_field_controller/rich_field_controller" alt="build"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 
 </p>
