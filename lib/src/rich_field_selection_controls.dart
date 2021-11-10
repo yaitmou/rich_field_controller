@@ -5,6 +5,10 @@ import 'package:rich_field_controller/rich_field_controller.dart';
 /// Handles the formatting options that appear on the contextual menu.
 /// That is when a left click is detected.
 ///
+/// If there is a selection range, the selected text will be formatted.
+/// Otherwise, if the the field has focus and the cursor is placed
+/// at the beginning, in the middle, or at the end of a word, that word
+/// will be formatted
 class RichFieldSelectionControls extends MaterialTextSelectionControls {
   final RichFieldController controller;
   final BuildContext context;
