@@ -60,9 +60,13 @@ class RichParagraph {
       }
     } else {
       // Account for when we select by dragging from left to right and vice vers ca
-      var selectionStart = math.min(_selection!.baseOffset, _selection!.extentOffset);
-      var selectionEnd = math.max(_selection!.baseOffset, _selection!.extentOffset);
-      _selectedElements = _elements.where((e) => e.start >= selectionStart && e.end <= selectionEnd).toList();
+      var selectionStart =
+          math.min(_selection!.baseOffset, _selection!.extentOffset);
+      var selectionEnd =
+          math.max(_selection!.baseOffset, _selection!.extentOffset);
+      _selectedElements = _elements
+          .where((e) => e.start >= selectionStart && e.end <= selectionEnd)
+          .toList();
     }
   }
 
@@ -101,7 +105,8 @@ class RichParagraph {
     // This are styles that are not linked to any element
     var floatingStyles = [];
     for (var s in _styles) {
-      var styledElement = _elements.singleWhereOrNull((e) => s.start == e.start && s.end == e.end);
+      var styledElement = _elements
+          .singleWhereOrNull((e) => s.start == e.start && s.end == e.end);
       if (styledElement == null) {
         floatingStyles.add(s);
       }
@@ -164,8 +169,10 @@ class RichParagraph {
       // If we have selected more than one element, we need to sync all
       // their respective styles in regards to this [newStyle]
       var _isDiscrepancy = false;
-      final elementWithStyle = _selectedElements.firstWhereOrNull((e) => e.style.styles.contains(style));
-      final elementWithoutStyle = _selectedElements.firstWhereOrNull((e) => !e.style.styles.contains(style));
+      final elementWithStyle = _selectedElements
+          .firstWhereOrNull((e) => e.style.styles.contains(style));
+      final elementWithoutStyle = _selectedElements
+          .firstWhereOrNull((e) => !e.style.styles.contains(style));
       _isDiscrepancy = elementWithStyle != null && elementWithoutStyle != null;
       for (var e in _selectedElements) {
         final newStyle = RichStyle(start: e.start);
@@ -211,7 +218,8 @@ class RichParagraph {
     for (var i = 0; i < _elements.length; i++) {
       // merge elements
       final currentElement = _elements.elementAt(i);
-      final nextElement = (i < _elements.length - 1) ? _elements.elementAt(i + 1) : null;
+      final nextElement =
+          (i < _elements.length - 1) ? _elements.elementAt(i + 1) : null;
       mergedElement ??= currentElement;
       if (nextElement != null) {
         if (currentElement.style.textStyle == nextElement.style.textStyle) {

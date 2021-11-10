@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
 
-/// Handles the formatting options that show on text selection
-/// when a left clicking on a text
+/// Handles the formatting options that appear on the contextual menu.
+/// That is when a left click is detected.
 ///
 class RichFieldSelectionControls extends MaterialTextSelectionControls {
   final RichFieldController controller;
@@ -17,7 +17,9 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
     delegate.userUpdateTextEditingValue(
       TextEditingValue(
         text: delegate.textEditingValue.text,
-        selection: TextSelection.collapsed(offset: delegate.textEditingValue.selection.end),
+        selection: TextSelection.collapsed(
+          offset: delegate.textEditingValue.selection.end,
+        ),
       ),
       SelectionChangedCause.toolBar,
     );
@@ -32,14 +34,20 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
     _updateTextStyle(delegate, const TextStyle(fontStyle: FontStyle.italic));
   }
 
-  // todo combine multiple [TextDecoration]s by using [TextDecoration.combine]
+  // todo cZombine multiple [TextDecoration]s by using [TextDecoration.combine]
 
   void _handleUnderLine(TextSelectionDelegate delegate) {
-    _updateTextStyle(delegate, const TextStyle(decoration: TextDecoration.underline));
+    _updateTextStyle(
+      delegate,
+      const TextStyle(decoration: TextDecoration.underline),
+    );
   }
 
   void _handleStrickThrough(TextSelectionDelegate delegate) {
-    _updateTextStyle(delegate, const TextStyle(decoration: TextDecoration.lineThrough));
+    _updateTextStyle(
+      delegate,
+      const TextStyle(decoration: TextDecoration.lineThrough),
+    );
   }
 
   @override
@@ -72,12 +80,16 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
           onPressed: canCut(delegate) ? () => handleCut(delegate) : null,
         ),
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.copy_rounded, size: 22, color: Colors.black87),
+          child:
+              const Icon(Icons.copy_rounded, size: 22, color: Colors.black87),
           padding: const EdgeInsets.all(8.0),
-          onPressed: canCopy(delegate) ? () => handleCopy(delegate, clipboardStatus) : null,
+          onPressed: canCopy(delegate)
+              ? () => handleCopy(delegate, clipboardStatus)
+              : null,
         ),
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.paste_rounded, size: 22, color: Colors.black87),
+          child:
+              const Icon(Icons.paste_rounded, size: 22, color: Colors.black87),
           padding: const EdgeInsets.all(8.0),
           onPressed: canPaste(delegate) ? () => handlePaste(delegate) : null,
         ),
@@ -85,7 +97,11 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
         // Bold
         //
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.format_bold_rounded, size: 22, color: Colors.black87),
+          child: const Icon(
+            Icons.format_bold_rounded,
+            size: 22,
+            color: Colors.black87,
+          ),
           padding: const EdgeInsets.all(8.0),
           onPressed: () => _handleBold(delegate),
         ),
@@ -94,7 +110,11 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
         // Italic
         //
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.format_italic_rounded, size: 22, color: Colors.black87),
+          child: const Icon(
+            Icons.format_italic_rounded,
+            size: 22,
+            color: Colors.black87,
+          ),
           padding: const EdgeInsets.all(8.0),
           onPressed: () => _handleItalic(delegate),
         ),
@@ -103,7 +123,11 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
         // Underline
         //
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.format_underline_rounded, size: 22, color: Colors.black87),
+          child: const Icon(
+            Icons.format_underline_rounded,
+            size: 22,
+            color: Colors.black87,
+          ),
           padding: const EdgeInsets.all(8.0),
           onPressed: () => _handleUnderLine(delegate),
         ),
@@ -112,7 +136,11 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
         // strick through
         //
         TextSelectionToolbarTextButton(
-          child: const Icon(Icons.format_strikethrough_rounded, size: 22, color: Colors.black87),
+          child: const Icon(
+            Icons.format_strikethrough_rounded,
+            size: 22,
+            color: Colors.black87,
+          ),
           padding: const EdgeInsets.all(8.0).copyWith(right: 18),
           onPressed: () => _handleStrickThrough(delegate),
         ),
