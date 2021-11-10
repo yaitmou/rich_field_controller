@@ -27,29 +27,46 @@ void main() {
       });
     });
     group('Elements styling', () {
-      test('Given a selection, when text style is applied, then the style set should match with the selection range', () {
+      test(
+          'Given a selection, when text style is applied, then the style set should match with the selection range',
+          () {
         var expectedStyles = {
-          RichStyle(start: 5, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
-          RichStyle(start: 6, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
-          RichStyle(start: 7, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
-          RichStyle(start: 8, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 5, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 6, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 7, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 8, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
         };
-        paragraph.updateSelection(const TextSelection(baseOffset: 5, extentOffset: 5));
-        paragraph.updateSelectedTextStyle(const TextStyle(fontWeight: FontWeight.bold));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 5, extentOffset: 5));
+        paragraph.updateSelectedTextStyle(
+            const TextStyle(fontWeight: FontWeight.bold));
         expect(paragraph.styles, expectedStyles);
       });
-      test('Given a selection, when selected element is already styled, then the style should be removed', () {
+      test(
+          'Given a selection, when selected element is already styled, then the style should be removed',
+          () {
         var expectedStyles = {
-          RichStyle(start: 5, styles: {}),
-          RichStyle(start: 6, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
-          RichStyle(start: 7, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
-          RichStyle(start: 8, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(start: 5, styles: const <TextStyle>{}),
+          RichStyle(
+              start: 6, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 7, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
+          RichStyle(
+              start: 8, styles: {const TextStyle(fontWeight: FontWeight.bold)}),
         };
 
-        paragraph.updateSelection(const TextSelection(baseOffset: 5, extentOffset: 5));
-        paragraph.updateSelectedTextStyle(const TextStyle(fontWeight: FontWeight.bold));
-        paragraph.updateSelection(const TextSelection(baseOffset: 5, extentOffset: 6));
-        paragraph.updateSelectedTextStyle(const TextStyle(fontWeight: FontWeight.bold));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 5, extentOffset: 5));
+        paragraph.updateSelectedTextStyle(
+            const TextStyle(fontWeight: FontWeight.bold));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 5, extentOffset: 6));
+        paragraph.updateSelectedTextStyle(
+            const TextStyle(fontWeight: FontWeight.bold));
 
         expect(paragraph.styles, expectedStyles);
       });
@@ -63,17 +80,24 @@ void main() {
 
         expect(spans, expectedSpans);
       });
-      test('When styles are applied, built spans should be grouped by style', () {
+      test('When styles are applied, built spans should be grouped by style',
+          () {
         const expectedSpans = <InlineSpan>[
           TextSpan(text: 'Rich', style: TextStyle(fontWeight: FontWeight.bold)),
           TextSpan(text: ' text field'),
-          TextSpan(text: ' test content', style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(
+              text: ' test content',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ];
 
-        paragraph.updateSelection(const TextSelection(baseOffset: 0, extentOffset: 4));
-        paragraph.updateSelectedTextStyle(const TextStyle(fontWeight: FontWeight.bold));
-        paragraph.updateSelection(const TextSelection(baseOffset: 15, extentOffset: 28));
-        paragraph.updateSelectedTextStyle(const TextStyle(fontWeight: FontWeight.bold));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 0, extentOffset: 4));
+        paragraph.updateSelectedTextStyle(
+            const TextStyle(fontWeight: FontWeight.bold));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 15, extentOffset: 28));
+        paragraph.updateSelectedTextStyle(
+            const TextStyle(fontWeight: FontWeight.bold));
         final spans = paragraph.buildTextSpans();
 
         expect(spans, expectedSpans);
@@ -94,18 +118,23 @@ void main() {
         };
         expect(paragraph.selectedElements, expectedSelectedElements);
       });
-      test('With collapsed selection, selected elements should hold a word that contains the cursor position', () {
+      test(
+          'With collapsed selection, selected elements should hold a word that contains the cursor position',
+          () {
         final expectedSelectedElements = {
           RichElement(text: 't', start: 5),
           RichElement(text: 'e', start: 6),
           RichElement(text: 'x', start: 7),
           RichElement(text: 't', start: 8),
         };
-        paragraph.updateSelection(const TextSelection(baseOffset: 5, extentOffset: 5));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 5, extentOffset: 5));
         expect(paragraph.selectedElements, expectedSelectedElements);
-        paragraph.updateSelection(const TextSelection(baseOffset: 6, extentOffset: 6));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 6, extentOffset: 6));
         expect(paragraph.selectedElements, expectedSelectedElements);
-        paragraph.updateSelection(const TextSelection(baseOffset: 8, extentOffset: 8));
+        paragraph.updateSelection(
+            const TextSelection(baseOffset: 8, extentOffset: 8));
         expect(paragraph.selectedElements, expectedSelectedElements);
       });
     });

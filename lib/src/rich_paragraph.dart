@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:rich_field_controller/src/element.dart';
 import 'package:rich_field_controller/src/style.dart';
+import 'package:rich_field_controller/src/styles_sheet.dart';
 
 /// The core functionalities of the [RichFieldController] are handled here.
 ///
@@ -238,5 +239,29 @@ class RichParagraph {
     }
 
     return _spans!;
+  }
+
+  /// Converts the styled paragraph to markdown
+  ///
+  String toMarkdown() {
+    var str = '';
+    for (var e in _curatedElements) {
+      var elementTextStyle = e.style.styles;
+      if (elementTextStyle.isEmpty) {
+        str += e.text;
+      } else {
+        var mdOpenings = '';
+        var mdClosings = '';
+        for (var ts in elementTextStyle) {
+          mdOpenings += stylesMap[ts]?.opening ?? '';
+          mdClosings = stylesMap[ts]?.closing ?? '' + mdClosings;
+        }
+        // str += mdOpenings + e.text + mdSymbols.split('').reversed.join();
+        str += mdOpenings + e.text + mdClosings;
+      }
+    }
+    print(str);
+    print(_styles);
+    return str;
   }
 }

@@ -38,7 +38,7 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
     _updateTextStyle(delegate, const TextStyle(fontStyle: FontStyle.italic));
   }
 
-  // todo cZombine multiple [TextDecoration]s by using [TextDecoration.combine]
+  // todo combine multiple [TextDecoration]s by using [TextDecoration.combine]
 
   void _handleUnderLine(TextSelectionDelegate delegate) {
     _updateTextStyle(

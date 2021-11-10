@@ -37,11 +37,24 @@ class RichStyle extends Equatable {
   // one. But that won't result in any performance improvement. So give it up
   // Remember Donald knuth's saying ;)
   void toggleTextStyle(TextStyle textStyle) {
-    if (styles.contains(textStyle)) {
+    final backgroundFound = styles.where(
+      (s) {
+        if (s.background != null && textStyle.background != null) {
+          return s.background!.color == textStyle.background!.color;
+        }
+        return false;
+      },
+    ).toList();
+    if (backgroundFound.isNotEmpty) {
+      styles = styles
+          .where((s) => s.background!.color != textStyle.background!.color)
+          .toSet();
+    } else if (styles.contains(textStyle)) {
       styles = styles.where((s) => s != textStyle).toSet();
     } else {
       styles = {...styles, textStyle};
     }
+    backgroundFound.clear();
   }
 
   // Read above before refactoring!

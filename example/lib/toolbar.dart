@@ -9,7 +9,8 @@ class RichfieldToolBarExample extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _RichfieldToolBarExampleState createState() => _RichfieldToolBarExampleState();
+  _RichfieldToolBarExampleState createState() =>
+      _RichfieldToolBarExampleState();
 }
 
 class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
@@ -31,10 +32,14 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8).copyWith(left: 0),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8)
+                          .copyWith(left: 0),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(fontWeight: FontWeight.bold));
+                      controller.updateStyle(
+                        const TextStyle(fontWeight: FontWeight.bold),
+                      );
                     },
                     child: const Icon(
                       Icons.format_bold_rounded,
@@ -50,10 +55,12 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(fontStyle: FontStyle.italic));
+                      controller.updateStyle(
+                          const TextStyle(fontStyle: FontStyle.italic));
                     },
                     child: const Icon(
                       Icons.format_italic_rounded,
@@ -69,10 +76,12 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(decoration: TextDecoration.underline));
+                      controller.updateStyle(const TextStyle(
+                          decoration: TextDecoration.underline));
                     },
                     child: const Icon(
                       Icons.format_underline_rounded,
@@ -88,13 +97,84 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(decoration: TextDecoration.lineThrough));
+                      controller.updateStyle(const TextStyle(
+                          decoration: TextDecoration.lineThrough));
                     },
                     child: const Icon(
                       Icons.format_strikethrough_rounded,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+              ),
+
+              //
+              // Highlight text
+              //
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.updateStyle(
+                        TextStyle(
+                          background: Paint()..color = Colors.yellow,
+                        ),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.format_color_fill_rounded,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+              ),
+              //
+              // Highlight text
+              //
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.mainStyle = const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        inherit: true,
+                      );
+                    },
+                    child: const Text(
+                      'H1',
+                      style: TextStyle(
+                          color: Colors.black54, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              //
+              // Strike through Button
+              //
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.toMarkdown();
+                    },
+                    child: const Icon(
+                      Icons.save_alt_rounded,
                       color: Colors.black54,
                     ),
                   ),

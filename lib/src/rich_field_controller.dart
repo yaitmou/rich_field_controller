@@ -14,6 +14,8 @@ class RichFieldController extends TextEditingController {
 
   late final _paragraph = RichParagraph(node: focusNode);
 
+  TextStyle? mainStyle;
+
   /// This is the core function of the [rich_field_controller]. I takes a required [style]
   /// and applies it to the selected text. If there is no active selection, but
   /// the focus is still on the [TextFiled], then the style is applied to the word
@@ -21,6 +23,10 @@ class RichFieldController extends TextEditingController {
   void updateStyle(TextStyle style) {
     selection = _paragraph.selection ?? selection;
     _paragraph.updateSelectedTextStyle(style);
+  }
+
+  String toMarkdown() {
+    return _paragraph.toMarkdown();
   }
 
   @override
@@ -41,6 +47,7 @@ class RichFieldController extends TextEditingController {
     if (selection != _paragraph.selection) {
       _paragraph.updateSelection(selection);
     }
-    return TextSpan(style: style, children: _paragraph.buildTextSpans());
+    return TextSpan(
+        style: mainStyle ?? style, children: _paragraph.buildTextSpans());
   }
 }
