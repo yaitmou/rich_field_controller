@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
 
 /// Handles the formatting options that appear on the contextual menu.
@@ -25,7 +24,7 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
           offset: delegate.textEditingValue.selection.end,
         ),
       ),
-      SelectionChangedCause.toolBar,
+      SelectionChangedCause.toolbar,
     );
     delegate.hideToolbar();
   }
@@ -62,7 +61,7 @@ class RichFieldSelectionControls extends MaterialTextSelectionControls {
     Offset selectionMidpoint,
     List<TextSelectionPoint> endpoints,
     TextSelectionDelegate delegate,
-    ClipboardStatusNotifier clipboardStatus,
+    ClipboardStatusNotifier? clipboardStatus,
     Offset? lastSecondaryTapDownPosition,
   ) {
     return TextSelectionToolbar(
