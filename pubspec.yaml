@@ -5,8 +5,8 @@ repository: "https://github.com/yaitmou/rich_field_controller.git"
 homepage: "https://github.com/yaitmou/rich_field_controller.git"
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   collection: ^1.15.0
