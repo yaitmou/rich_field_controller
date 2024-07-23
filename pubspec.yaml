@@ -6,7 +6,7 @@ repository: 'https://github.com/yaitmou/rich_field_controller.git'
 homepage: 'https://github.com/yaitmou/rich_field_controller.git'
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: '>=2.17.0 <4.0.0'
   flutter: '>=3.7.0'
 
 dependencies:
