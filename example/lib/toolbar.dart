@@ -9,8 +9,7 @@ class RichfieldToolBarExample extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _RichfieldToolBarExampleState createState() =>
-      _RichfieldToolBarExampleState();
+  _RichfieldToolBarExampleState createState() => _RichfieldToolBarExampleState();
 }
 
 class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
@@ -32,18 +31,16 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8)
-                          .copyWith(left: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8).copyWith(left: 0),
                   child: GestureDetector(
                     onTap: () {
                       controller.updateStyle(
                         const TextStyle(fontWeight: FontWeight.bold),
                       );
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.format_bold_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -55,16 +52,14 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(
-                          const TextStyle(fontStyle: FontStyle.italic));
+                      controller.updateStyle(const TextStyle(fontStyle: FontStyle.italic));
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.format_italic_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -76,16 +71,14 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(
-                          decoration: TextDecoration.underline));
+                      controller.updateStyle(const TextStyle(decoration: TextDecoration.underline));
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.format_underline_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -97,16 +90,15 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(
-                          decoration: TextDecoration.lineThrough));
+                      controller
+                          .updateStyle(const TextStyle(decoration: TextDecoration.lineThrough));
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.format_strikethrough_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -118,8 +110,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
                       controller.updateStyle(
@@ -128,9 +119,9 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                         ),
                       );
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.format_color_fill_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
@@ -141,21 +132,22 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.mainStyle = const TextStyle(
+                      controller.mainStyle = TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Theme.of(context).hintColor,
                         inherit: true,
                       );
                     },
                     child: const Text(
                       'H1',
                       style: TextStyle(
-                          color: Colors.black54, fontWeight: FontWeight.bold),
+                        // color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -167,15 +159,14 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
                       controller.toMarkdown();
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.save_alt_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),

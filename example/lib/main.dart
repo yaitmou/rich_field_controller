@@ -15,9 +15,9 @@ class RichFieldExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      darkTheme: ThemeData.dark(),
+      theme: ThemeData.light(),
+      themeMode: ThemeMode.dark,
       home: const Home(),
     );
   }
@@ -35,14 +35,14 @@ class _HomeState extends State<Home> {
   late final RichFieldController _controller;
   // This is for demonstration only. You can define your own [TextSelectionControl]
   // and inject a [RichFieldController] in it to access the styling properties
-  late final RichFieldSelectionControls _selectionControls;
+  // late final RichFieldSelectionControls _selectionControls;
 
   @override
   void initState() {
     super.initState();
     _fieldFocusNode = FocusNode();
     _controller = RichFieldController(focusNode: _fieldFocusNode);
-    _selectionControls = RichFieldSelectionControls(context, _controller);
+    // _selectionControls = RichFieldSelectionControls(context, _controller);
   }
 
   @override
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal[100],
+      // backgroundColor: Colors.teal[100],
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -65,20 +65,23 @@ class _HomeState extends State<Home> {
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 900),
                 padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.teal[200]!),
-                  borderRadius: BorderRadius.circular(4),
-                ),
+                // decoration: BoxDecoration(
+                //   color: Colors.white,
+                //   border: Border.all(color: Colors.teal[200]!),
+                //   borderRadius: BorderRadius.circular(4),
+                // ),
                 child: TextField(
                   controller: _controller,
                   focusNode: _fieldFocusNode,
                   maxLines: null,
 
                   // Use the style property to set a default style
-                  style: const TextStyle(
-                      fontSize: 18, height: 1.75, color: Colors.black87),
-                  selectionControls: _selectionControls,
+                  // style: const TextStyle(
+                  //   fontSize: 18,
+                  //   height: 1.75,
+                  //   color: Colors.black87,
+                  // ),
+                  // selectionControls: _selectionControls,
                   autofocus: true,
                   decoration: const InputDecoration(
                     hintText: 'Write something here...',
