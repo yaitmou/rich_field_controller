@@ -1,21 +1,21 @@
 name: rich_field_controller
-description: A rich text field controller that turns any Flutter TextField into
+description: A rich text field controller that turn any Flutter TextField into
   an WYSIWYG editor.
 version: 0.2.1
 repository: 'https://github.com/yaitmou/rich_field_controller.git'
 homepage: 'https://github.com/yaitmou/rich_field_controller.git'
 
 environment:
-  sdk: '>=2.17.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
   flutter: '>=3.7.0'
 
 dependencies:
-  collection: ^1.15.0
+  collection:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flutter_lints: ^1.0.0
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter

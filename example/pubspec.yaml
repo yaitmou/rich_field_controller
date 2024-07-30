@@ -5,20 +5,20 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.17.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
   flutter: '>=3.7.0'
 
 dependencies:
+  cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
   rich_field_controller:
     path: ../
 
 dev_dependencies:
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
 
 flutter:
   uses-material-design: true
