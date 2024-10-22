@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
 
 class RichfieldToolBarExample extends StatefulWidget {
-  final RichFieldController controller;
+  final RichTextEditingController controller;
   const RichfieldToolBarExample(
     this.controller, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _RichfieldToolBarExampleState createState() => _RichfieldToolBarExampleState();
+  State<RichfieldToolBarExample> createState() => _RichfieldToolBarExampleState();
 }
 
 class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
-  RichFieldController get controller => widget.controller;
+  RichTextEditingController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,10 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8).copyWith(left: 0),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(
-                        const TextStyle(fontWeight: FontWeight.bold),
-                      );
+                      controller.toggleBold();
                     },
                     child: Icon(
-                      Icons.format_bold_rounded,
+                      MdiIcons.formatBold,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -55,10 +54,10 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(fontStyle: FontStyle.italic));
+                      controller.toggleItalic();
                     },
                     child: Icon(
-                      Icons.format_italic_rounded,
+                      MdiIcons.formatItalic,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -74,10 +73,10 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller.updateStyle(const TextStyle(decoration: TextDecoration.underline));
+                      controller.toggleUnderline();
                     },
                     child: Icon(
-                      Icons.format_underline_rounded,
+                      MdiIcons.formatUnderline,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -93,11 +92,28 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      controller
-                          .updateStyle(const TextStyle(decoration: TextDecoration.lineThrough));
+                      controller.toggleStrikethrough();
                     },
                     child: Icon(
-                      Icons.format_strikethrough_rounded,
+                      MdiIcons.formatStrikethrough,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
+                ),
+              ),
+              //
+              // Strike through Button
+              //
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.toggleListItem();
+                    },
+                    child: Icon(
+                      MdiIcons.formatListBulleted,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -105,72 +121,71 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               ),
 
               //
+              // Heading levels text
+              //
+              DropdownMenu<int>(
+                onSelected: (value) {
+                  if (value != null) {
+                    controller.toggleHeader(value);
+                  }
+                },
+                initialSelection: null,
+                hintText: 'Heading',
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(value: 1, label: 'H1'),
+                  DropdownMenuEntry(value: 2, label: 'H2'),
+                  DropdownMenuEntry(value: 3, label: 'H3'),
+                  DropdownMenuEntry(value: 4, label: 'H4'),
+                  DropdownMenuEntry(value: 5, label: 'H5'),
+                  DropdownMenuEntry(value: 6, label: 'H6'),
+                ],
+              ),
+
+              //
               // Highlight text
               //
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.updateStyle(
-                        TextStyle(
-                          background: Paint()..color = Colors.yellow,
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.format_color_fill_rounded,
-                      color: Theme.of(context).hintColor,
-                    ),
-                  ),
-                ),
-              ),
-              //
-              // Highlight text
-              //
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.mainStyle = TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).hintColor,
-                        inherit: true,
-                      );
-                    },
-                    child: const Text(
-                      'H1',
-                      style: TextStyle(
-                        // color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // MouseRegion(
+              //   cursor: SystemMouseCursors.click,
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+              //     child: GestureDetector(
+              //       onTap: () {
+              //         controller.mainStyle = TextStyle(
+              //           fontSize: 24,
+              //           fontWeight: FontWeight.bold,
+              //           color: Theme.of(context).hintColor,
+              //           inherit: true,
+              //         );
+              //       },
+              //       child: const Text(
+              //         'H1',
+              //         style: TextStyle(
+              //           // color: Colors.black54,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               const Spacer(),
               //
               // Strike through Button
               //
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.toMarkdown();
-                    },
-                    child: Icon(
-                      Icons.save_alt_rounded,
-                      color: Theme.of(context).hintColor,
-                    ),
-                  ),
-                ),
-              ),
+              // MouseRegion(
+              //   cursor: SystemMouseCursors.click,
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+              //     child: GestureDetector(
+              //       onTap: () {
+              //         controller.toMarkdown();
+              //       },
+              //       child: Icon(
+              //         Icons.save_alt_rounded,
+              //         color: Theme.of(context).hintColor,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

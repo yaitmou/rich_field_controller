@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
-import './toolbar.dart';
+import 'package:rich_field_example/toolbar.dart';
 
 /// This example illustrates how to use a [RichTextController] with a [TextField]
 /// to turn it into a rich text input field
@@ -9,7 +9,7 @@ void main() {
 }
 
 class RichFieldExample extends StatelessWidget {
-  const RichFieldExample({Key? key}) : super(key: key);
+  const RichFieldExample({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class RichFieldExample extends StatelessWidget {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -32,7 +32,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late final FocusNode _fieldFocusNode;
-  late final RichFieldController _controller;
+  late final RichTextEditingController _controller;
   // This is for demonstration only. You can define your own [TextSelectionControl]
   // and inject a [RichFieldController] in it to access the styling properties
   // late final RichFieldSelectionControls _selectionControls;
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _fieldFocusNode = FocusNode();
-    _controller = RichFieldController(focusNode: _fieldFocusNode);
+    _controller = RichTextEditingController(context: context);
     // _selectionControls = RichFieldSelectionControls(context, _controller);
   }
 
@@ -63,25 +63,15 @@ class _HomeState extends State<Home> {
             RichfieldToolBarExample(_controller),
             Center(
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 900),
+                constraints: const BoxConstraints(maxWidth: 900, maxHeight: 900),
                 padding: const EdgeInsets.all(14),
-                // decoration: BoxDecoration(
-                //   color: Colors.white,
-                //   border: Border.all(color: Colors.teal[200]!),
-                //   borderRadius: BorderRadius.circular(4),
-                // ),
                 child: TextField(
                   controller: _controller,
                   focusNode: _fieldFocusNode,
                   maxLines: null,
-
-                  // Use the style property to set a default style
-                  // style: const TextStyle(
-                  //   fontSize: 18,
-                  //   height: 1.75,
-                  //   color: Colors.black87,
-                  // ),
-                  // selectionControls: _selectionControls,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                   autofocus: true,
                   decoration: const InputDecoration(
                     hintText: 'Write something here...',
@@ -93,6 +83,9 @@ class _HomeState extends State<Home> {
                     isDense: true,
                     contentPadding: EdgeInsets.all(14),
                   ),
+                  inputFormatters: [
+                    BulletPointFormatter(),
+                  ],
                 ),
               ),
             ),

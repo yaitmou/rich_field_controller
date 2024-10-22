@@ -5,6 +5,6 @@
 /// A library to handle rich text editing in Flutter
 library rich_field_controller;
 
-// export 'src/reditor.dart';
-export 'src/rich_field_controller.dart';
-export 'src/rich_field_selection_controls.dart';
+export 'src/controllers/rich_text_editing_controller.dart';
+export 'src/controllers/formatters/bullet_formatter.dart';
+export 'src/controllers/formatters/header_formatter.dart';

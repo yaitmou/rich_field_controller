@@ -1,3 +1,13 @@
+## 0.3.0
+
+- Added support for realtime markdown formatting
+- Added New styling:
+  - bullet lists
+- Added Export for:
+  - As HTML
+  - As markdown
+- Code refactoring and house keeping
+
 ## 0.2.0
 
 - Upgraded Flutter to >=3.7.0.
