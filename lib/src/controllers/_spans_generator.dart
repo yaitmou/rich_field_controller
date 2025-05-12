@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:rich_field_controller/src/domain/entities/rich_text_style.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SpansGenerator {
   final BuildContext context;
@@ -16,18 +17,6 @@ class SpansGenerator {
     required RichTextStyle style,
     TextStyle? baseStyle,
   }) {
-    // if (style.isBlockquote) {
-    //   return WidgetSpan(
-    //     child: EditableCodeBlock(
-    //       initialCode: text,
-    //       onChanged: (value) {
-    //         print(value);
-    //       },
-    //       textStyle: baseStyle ?? const TextStyle(),
-    //     ),
-    //   );
-    // }
-
     return TextSpan(
       text: text,
       style: _styleBuilder(style, baseStyle ?? const TextStyle()),
@@ -55,7 +44,7 @@ class SpansGenerator {
           ..strokeJoin = StrokeJoin.round,
       );
     } else if (richTextStyle.headerLevel == 1) {
-      style = theme.textTheme.headlineLarge!;
+      style = theme.textTheme.displayLarge!;
     } else if (richTextStyle.headerLevel == 2) {
       style = theme.textTheme.headlineMedium!;
     } else if (richTextStyle.headerLevel == 3) {
@@ -86,7 +75,7 @@ class SpansGenerator {
 
       // link
       if (richTextStyle.isLink) {
-        style = style.copyWith(decoration: TextDecoration.underline, color: Colors.blue);
+        style = style.copyWith(color: Colors.blue);
       }
     }
 
@@ -96,9 +85,11 @@ class SpansGenerator {
   GestureRecognizer? _createTapGestureRecognizer(String? url) {
     if (url == null) return null;
     return TapGestureRecognizer()
-      ..onTap = () {
-        // Handle link tap
-        // this should be uniform across all anchors: open url through url_launcher...
+      ..onTap = () async {
+        final uri = Uri.parse(url);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri);
+        }
       };
   }
 }

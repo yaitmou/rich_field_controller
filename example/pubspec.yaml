@@ -13,8 +13,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_material_design_icons: ^1.1.7447
+  get_it: ^8.0.2
   rich_field_controller:
     path: ../
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0

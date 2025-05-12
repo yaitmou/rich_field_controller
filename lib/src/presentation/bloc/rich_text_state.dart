@@ -5,11 +5,13 @@ enum RichTextStatus { initial, loading, success, failure }
 class RichTextState extends Equatable {
   final RichTextStatus status;
   final RichTextEntity richTextEntity;
+  final CaretEntity? caretEntity;
   final String? message;
 
   const RichTextState({
     this.status = RichTextStatus.initial,
     required this.richTextEntity,
+    this.caretEntity,
     this.message,
   });
 
@@ -24,12 +26,14 @@ class RichTextState extends Equatable {
   RichTextState copyWith({
     RichTextStatus? status,
     RichTextEntity? richTextEntity,
-    String? message,
+    CaretEntity? Function()? caretEntity,
+    String? Function()? message,
   }) =>
       RichTextState(
         status: status ?? this.status,
         richTextEntity: richTextEntity ?? this.richTextEntity,
-        message: message ?? this.message,
+        caretEntity: caretEntity != null ? caretEntity() : this.caretEntity,
+        message: message != null ? message() : this.message,
       );
 
   factory RichTextState.initial() => const RichTextState(
@@ -41,5 +45,5 @@ class RichTextState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [status, richTextEntity, message];
+  List<Object?> get props => [status, richTextEntity, message, caretEntity];
 }

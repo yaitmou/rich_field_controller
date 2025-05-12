@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:rich_field_controller/rich_field_controller.dart';
 
 class RichfieldToolBarExample extends StatefulWidget {
@@ -38,7 +38,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                       controller.toggleBold();
                     },
                     child: Icon(
-                      MdiIcons.formatBold,
+                      CupertinoIcons.bold,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -57,7 +57,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                       controller.toggleItalic();
                     },
                     child: Icon(
-                      MdiIcons.formatItalic,
+                      CupertinoIcons.italic,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -76,7 +76,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                       controller.toggleUnderline();
                     },
                     child: Icon(
-                      MdiIcons.formatUnderline,
+                      CupertinoIcons.underline,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -95,14 +95,15 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                       controller.toggleStrikethrough();
                     },
                     child: Icon(
-                      MdiIcons.formatStrikethrough,
+                      CupertinoIcons.strikethrough,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
                 ),
               ),
+
               //
-              // Strike through Button
+              // toggle bullet list through Button
               //
               MouseRegion(
                 cursor: SystemMouseCursors.click,
@@ -113,7 +114,7 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
                       controller.toggleListItem();
                     },
                     child: Icon(
-                      MdiIcons.formatListBulleted,
+                      CupertinoIcons.list_bullet,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
@@ -121,25 +122,100 @@ class _RichfieldToolBarExampleState extends State<RichfieldToolBarExample> {
               ),
 
               //
-              // Heading levels text
+              // toggle Numbered list through Button
               //
-              DropdownMenu<int>(
-                onSelected: (value) {
-                  if (value != null) {
-                    controller.toggleHeader(value);
-                  }
-                },
-                initialSelection: null,
-                hintText: 'Heading',
-                dropdownMenuEntries: const [
-                  DropdownMenuEntry(value: 1, label: 'H1'),
-                  DropdownMenuEntry(value: 2, label: 'H2'),
-                  DropdownMenuEntry(value: 3, label: 'H3'),
-                  DropdownMenuEntry(value: 4, label: 'H4'),
-                  DropdownMenuEntry(value: 5, label: 'H5'),
-                  DropdownMenuEntry(value: 6, label: 'H6'),
-                ],
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.toggleNumberedList();
+                    },
+                    child: Icon(
+                      CupertinoIcons.list_number,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
+                ),
               ),
+              //
+              // Toggle Header
+              //
+              MenuAnchor(
+                builder: (context, menuController, child) {
+                  return MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (menuController.isOpen) {
+                            menuController.close();
+                          } else {
+                            menuController.open();
+                          }
+                          // controller.toggleHeader(1);
+                        },
+                        child: Icon(
+                          CupertinoIcons.textformat_size,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                menuChildren: List.generate(
+                  6,
+                  (int i) => MenuItemButton(
+                    onPressed: () {
+                      controller.toggleHeader(i + 1);
+                    },
+                    child: Text('Level ${i + 1}'),
+                  ),
+                ),
+              ),
+
+              //
+              // Export as HTML
+              //
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      final c = controller.toMarkdown();
+                      print('\n$c');
+                    },
+                    child: Icon(
+                      CupertinoIcons.share,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
+                ),
+              ),
+
+              // //
+              // // Heading levels text
+              // //
+              // DropdownMenu<int>(
+              //   onSelected: (value) {
+              //     if (value != null) {
+              //       controller.toggleHeader(value);
+              //     }
+              //   },
+              //   initialSelection: null,
+              //   hintText: 'Heading',
+              //   dropdownMenuEntries: const [
+              //     DropdownMenuEntry(value: 1, label: 'H1'),
+              //     DropdownMenuEntry(value: 2, label: 'H2'),
+              //     DropdownMenuEntry(value: 3, label: 'H3'),
+              //     DropdownMenuEntry(value: 4, label: 'H4'),
+              //     DropdownMenuEntry(value: 5, label: 'H5'),
+              //     DropdownMenuEntry(value: 6, label: 'H6'),
+              //   ],
+              // ),
 
               //
               // Highlight text

@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rich_field_controller/injection_container.dart';
 import 'package:rich_field_controller/src/controllers/_spans_generator.dart';
+import 'package:rich_field_controller/src/controllers/formatters/bullet_formatter.dart';
+import 'package:rich_field_controller/src/controllers/formatters/header_formatter.dart';
+import 'package:rich_field_controller/src/controllers/formatters/inline_markdown_formatter.dart';
+import 'package:rich_field_controller/src/controllers/formatters/link_formatter.dart';
+import 'package:rich_field_controller/src/controllers/formatters/number_list_formatter.dart';
 import 'package:rich_field_controller/src/convertors/html_converter.dart';
 import 'package:rich_field_controller/src/convertors/markdown_convertor.dart';
 import 'package:rich_field_controller/src/domain/entities/rich_text_entity.dart';
 import 'package:rich_field_controller/src/domain/entities/rich_text_span.dart';
 import 'package:rich_field_controller/src/domain/entities/rich_text_style.dart';
-import 'package:rich_field_controller/src/domain/entities/tags/markdown_tags.dart';
+import 'package:rich_field_controller/src/domain/usecases/get_caret.dart';
 import 'package:rich_field_controller/src/presentation/bloc/rich_text_bloc.dart';
 
 class RichTextEditingController extends TextEditingController {
   final BuildContext context;
-  late final RichTextBloc bloc;
   String? initialText;
 
   late final SpansGenerator _spansGenerator;
@@ -23,21 +29,59 @@ class RichTextEditingController extends TextEditingController {
   bool caretAtStart = false;
   TextPainter? _painter;
 
-  double? textFieldWidth;
+  /// formatters
+  late final LinkFormatter _linkFormatter;
+  late final HeaderFormatter _headerFormatter;
+  late final InlineMarkdownFormatter _inlineMarkdownFormatter;
+  final GlobalKey textFieldKey;
+
+  // the bloc
+  RichTextBloc bloc = sl<RichTextBloc>();
 
   RichTextEditingController({
     required this.context,
-    // required this.bloc,
-    this.textFieldWidth = 0,
+    required this.textFieldKey,
     this.initialText,
   }) {
-    bloc = RichTextBloc();
-    _spansGenerator = SpansGenerator(context);
     _initializeController();
-  }
 
-  void _initializeController() {
+    _spansGenerator = SpansGenerator(context);
+
+    // link formatter
+    _linkFormatter = LinkFormatter(
+      onLinkFound: (text, url, start, end) {
+        WidgetsBinding.instance.addPostFrameCallback((d) {
+          final urlStyle = RichTextStyle(
+            isLink: true,
+            linkUrl: url,
+          );
+          bloc.add(ApplyStyleEvent(urlStyle, start, end));
+        });
+      },
+    );
+
+    // Header formatter
+    _headerFormatter = HeaderFormatter(
+      onHeaderCommand: (command) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          bloc.add(ApplyStyleEvent(command.style, command.start, command.end));
+        });
+      },
+    );
+
+    // In the constructor, initialize the formatter
+    _inlineMarkdownFormatter = InlineMarkdownFormatter(
+      onStyleFound: (style, start, end) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          bloc.add(ApplyStyleEvent(style, start, end));
+        });
+      },
+    );
+  }
+  void _initializeController() async {
+    // await initRichTextEditingController();
     // Listen for bloc stream and call listeners (defined below)
+
     bloc.stream.listen((state) {
       notifyListeners();
     });
@@ -66,19 +110,17 @@ class RichTextEditingController extends TextEditingController {
   // this position should be converted to offset at te caret receiver side!
   double get caretPosition {
     if (_painter != null) {
-      final lines = _painter!.computeLineMetrics();
-      if (lines.isNotEmpty) {
-        final caretOffset = _painter!.getOffsetForCaret(
-          TextPosition(offset: selection.baseOffset),
-          Rect.zero,
-        );
-        selection = TextSelection.collapsed(
-          offset: _painter!.getPositionForOffset(caretInitialRawOffset).offset,
-        );
-        return caretOffset.dx;
-      } else {
-        return 0.0;
-      }
+      bloc.add(
+        CaretRequested(
+          CaretParams(
+            painter: _painter!,
+            selection: selection,
+          ),
+        ),
+      );
+      final caret = bloc.state.caretEntity;
+
+      return caret?.xPosition ?? 0.0;
     } else {
       return 0.0;
     }
@@ -100,81 +142,6 @@ class RichTextEditingController extends TextEditingController {
   }
 
   @override
-  set value(TextEditingValue newValue) {
-    super.value = newValue;
-    for (var tag in MarkdownTags.values) {
-      if (newValue.text.length > bloc.state.richTextEntity.content.length) {
-        int startAt = 0;
-        startAt = _parseMarkdownTags(newValue, tag, startAt);
-      }
-    }
-  }
-
-  /// this is called whenever new characters are entered. It looks for the inline tags and style the
-  /// surrounded text accordingly.
-  int _parseMarkdownTags(TextEditingValue value, MarkdownTags tag, int startAt) {
-    String text = value.text;
-    final openingTag = tag.openingTag;
-    final openingTagLength = tag.openingTagLength;
-    final closingTag = tag.closingTag;
-    final closingTagLength = tag.closingTagLength;
-    final style = tag.style;
-
-    int startIndex = startAt;
-    bool madeChange = false;
-
-    int openTagPosition = text.indexOf(openingTag, 0);
-    if (openTagPosition == -1) {
-      return startAt;
-    }
-
-    int closeTagPosition = text.indexOf(closingTag, openTagPosition + openingTagLength);
-    if (closeTagPosition == -1) {
-      return startAt;
-    }
-
-    String surroundedText = text.substring(openTagPosition + openingTagLength, closeTagPosition);
-    // make sure we do not trigger formatting unless we move out of the last tag
-    final cursor = value.selection.baseOffset;
-    if (surroundedText.isEmpty || cursor > (closeTagPosition + closingTagLength)) {
-      return startAt;
-    }
-
-    // Remove surrounding characters
-    // Warning: we should remove the last tag first
-
-    text = text.replaceRange(closeTagPosition, closeTagPosition + closingTagLength, '');
-    text = text.replaceRange(openTagPosition, openTagPosition + openingTagLength, '');
-    // after removing characters we should shit the text's position (from the style POV)
-    final newStartTextPos = openTagPosition;
-    final newEndTextPos = openTagPosition + surroundedText.length;
-
-    madeChange = true;
-    startIndex = openTagPosition + surroundedText.length;
-
-    bloc
-      ..add(UpdateContentEvent(text))
-      ..add(
-        ApplyStyleEvent(
-          style,
-          newStartTextPos,
-          newEndTextPos,
-        ),
-      );
-    if (madeChange) {
-      // In this bloc we want to move the cursor to the end of the formatted text
-      int newCursorPosition = value.selection.baseOffset - 2 * closingTagLength;
-      if (newCursorPosition < 0) newCursorPosition = 0;
-      this.value = TextEditingValue(
-        text: text,
-        selection: TextSelection.collapsed(offset: newCursorPosition),
-      );
-    }
-
-    return startIndex;
-  }
-
-  @override
   TextSpan buildTextSpan({
     required BuildContext context,
     TextStyle? style,
@@ -188,49 +155,54 @@ class RichTextEditingController extends TextEditingController {
     ///
     ///
     ///
+    ///
 
     _painter = TextPainter(
       text: spans,
       textDirection: TextDirection.ltr,
       maxLines: null,
     );
-    _painter!.layout(maxWidth: textFieldWidth!);
 
-    final caretOffset = _painter!.getOffsetForCaret(
-      TextPosition(offset: selection.baseOffset),
-      Rect.zero,
-    );
-    final lines = _painter!.computeLineMetrics();
+    final RenderBox? renderBox = textFieldKey.currentContext?.findRenderObject() as RenderBox?;
+    final textFieldWidth = renderBox?.size.width;
+    _painter!.layout(maxWidth: textFieldWidth ?? 0.0);
 
-    const tolerance = 0.5;
-    if (lines.isEmpty) {
-      _isAtFirstLine = true;
-    } else {
-      _isAtFirstLine = caretOffset.dy.abs() < tolerance;
-    }
+    // final caretOffset = _painter!.getOffsetForCaret(
+    //   TextPosition(offset: selection.baseOffset),
+    //   Rect.zero,
+    // );
 
-    if (lines.isNotEmpty) {
-      final lastMetric = lines.last;
-      _isAtLastLine = caretOffset.dy + tolerance > lastMetric.height * lastMetric.lineNumber;
-    }
+    // final lines = _painter!.computeLineMetrics();
+
+    // const tolerance = 0.5;
+    // if (lines.isEmpty) {
+    //   _isAtFirstLine = true;
+    // } else {
+    //   _isAtFirstLine = caretOffset.dy.abs() < tolerance;
+    // }
+
+    // if (lines.isNotEmpty) {
+    //   final lastMetric = lines.last;
+    //   _isAtLastLine = caretOffset.dy + tolerance > lastMetric.height * lastMetric.lineNumber;
+    // }
 
     ///
     ///
     ///
     ///
 
-    if (_initPosition) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        int caretInitialOffset = -1;
-        if (value.text.isEmpty) {
-          caretInitialOffset = -1;
-        } else if (_painter != null) {
-          caretInitialOffset = _painter!.getPositionForOffset(caretInitialRawOffset).offset;
-        }
-        selection = TextSelection.collapsed(offset: caretInitialOffset);
-        _initPosition = false;
-      });
-    }
+    // if (_initPosition) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     int caretInitialOffset = -1;
+    //     if (value.text.isEmpty) {
+    //       caretInitialOffset = -1;
+    //     } else if (_painter != null) {
+    //       caretInitialOffset = _painter!.getPositionForOffset(caretInitialRawOffset).offset;
+    //     }
+    //     selection = TextSelection.collapsed(offset: caretInitialOffset);
+    //     _initPosition = false;
+    //   });
+    // }
 
     return spans;
   }
@@ -281,6 +253,21 @@ class RichTextEditingController extends TextEditingController {
     return TextSpan(style: baseStyle, children: children);
   }
 
+  /// Formatters
+
+  // Add formatter to the list of formatters
+  List<TextInputFormatter> get formatters => [
+        //
+        //The below formatter do not apply any styling
+        BulletPointFormatter(),
+        NumberListFormatter(),
+        //
+        // the below formatters apply styling...
+        _linkFormatter,
+        // _headerFormatter,
+        _inlineMarkdownFormatter,
+      ];
+
   /// Public API
   void toggleBold() {
     _applyStyle(const RichTextStyle(isBold: true));
@@ -303,34 +290,163 @@ class RichTextEditingController extends TextEditingController {
   }
 
   void toggleListItem() {
-    _addFormatTag('  \u2022 ');
+    final String text = value.text;
+    final TextSelection selection = value.selection;
+
+    // If no text is selected, just add a single bullet point
+    if (selection.baseOffset == selection.extentOffset) {
+      _addFormatTag('  \u2022 ');
+      return;
+    }
+
+    // Get the actual start and end positions accounting for selection direction
+    final int selectionStart = selection.start;
+    final int selectionEnd = selection.end;
+
+    // Get the start of the first line in selection
+    int lineStart;
+    if (selectionStart == 0) {
+      lineStart = 0;
+    } else {
+      lineStart = text.lastIndexOf('\n', selectionStart - 1) + 1;
+    }
+
+    // Get the end of the last line in selection
+    int lineEnd = text.indexOf('\n', selectionEnd);
+    if (lineEnd == -1) {
+      lineEnd = text.length;
+    } else {
+      lineEnd += 1; // Include the newline character
+    }
+
+    // Validate ranges
+    lineStart = lineStart.clamp(0, text.length);
+    lineEnd = lineEnd.clamp(lineStart, text.length);
+
+    // Split the selected text into lines
+    String selectedText = text.substring(lineStart, lineEnd);
+    List<String> lines = selectedText.split('\n');
+
+    // Build bullet point list
+    String newText = '';
+
+    for (int i = 0; i < lines.length; i++) {
+      String line = lines[i].trim();
+      // Skip empty lines
+      if (line.isEmpty) {
+        newText += '\n';
+        continue;
+      }
+
+      // Remove existing list markers if any
+      line = line.replaceFirst(RegExp(r'^\s*\d+\.\s*'), ''); // Remove numbered list marker
+      line = line.replaceFirst(RegExp(r'^\s*[•-]\s*'), ''); // Remove bullet point marker
+
+      // Add new bullet point marker
+      newText += '  \u2022 $line';
+
+      // Add newline for all but the last line
+      if (i < lines.length - 1) {
+        newText += '\n';
+      }
+    }
+
+    // Replace the text in the original string
+    final String beforeSelection = text.substring(0, lineStart);
+    final String afterSelection = lineEnd < text.length ? text.substring(lineEnd) : '';
+    final String updatedText = beforeSelection + newText + afterSelection;
+
+    // Calculate new cursor position
+    final int newCursorPosition = lineStart + newText.length;
+
+    value = TextEditingValue(
+      text: updatedText,
+      selection: TextSelection.collapsed(offset: newCursorPosition),
+    );
   }
 
-  void applyHeaderStyle(
-    int start,
-    int end,
-    int level,
-  ) {
-    // final style = RichTextStyle(headerLevel: level);
-    // bloc.add(ApplyStyleEvent(style, start, end));
-    final style = RichTextStyle(headerLevel: level);
+  void toggleNumberedList() {
+    final String text = value.text;
+    final TextSelection selection = value.selection;
 
-    // Add a newline before the header if it's not at the start of the text
-    // if (start > 0 && text[start - 1] != '\n') {
-    //   text = text.replaceRange(start, start, '\n');
-    //   end += 1;
-    // }
+    // If no text is selected, just add a single number
+    if (selection.baseOffset == selection.extentOffset) {
+      _addFormatTag('  1. ');
+      return;
+    }
 
-    // // Add a newline after the header if it's not at the end of the text
-    // if (end < text.length && text[end] != '\n') {
-    //   text = text.replaceRange(end, end, '\n');
-    // }
-    // final endIndex = text.indexOf('\n', start);
-    bloc.add(ApplyStyleEvent(style, start, end));
+    // Get the actual start and end positions accounting for selection direction
+    final int selectionStart = selection.start;
+    final int selectionEnd = selection.end;
+
+    // Get the start of the first line in selection
+    int lineStart;
+    if (selectionStart == 0) {
+      lineStart = 0;
+    } else {
+      lineStart = text.lastIndexOf('\n', selectionStart - 1) + 1;
+    }
+
+    // Get the end of the last line in selection
+    int lineEnd = text.indexOf('\n', selectionEnd);
+    if (lineEnd == -1) {
+      lineEnd = text.length;
+    } else {
+      lineEnd += 1; // Include the newline character
+    }
+
+    // Validate ranges
+    lineStart = lineStart.clamp(0, text.length);
+    lineEnd = lineEnd.clamp(lineStart, text.length);
+
+    // Split the selected text into lines
+    String selectedText = text.substring(lineStart, lineEnd);
+    List<String> lines = selectedText.split('\n');
+
+    // Build numbered list
+    String newText = '';
+    int number = 1;
+
+    for (int i = 0; i < lines.length; i++) {
+      String line = lines[i].trim();
+      // Skip empty lines
+      if (line.isEmpty) {
+        newText += '\n';
+        continue;
+      }
+
+      // Remove existing list markers if any
+      line = line.replaceFirst(RegExp(r'^\s*\d+\.\s*'), '');
+      line = line.replaceFirst(RegExp(r'^\s*[•-]\s*'), '');
+
+      // Add new numbered list marker
+      newText += '  $number. $line';
+
+      // Add newline for all but the last line
+      if (i < lines.length - 1) {
+        newText += '\n';
+      }
+
+      number++;
+    }
+
+    // Replace the text in the original string
+    final String beforeSelection = text.substring(0, lineStart);
+    final String afterSelection = lineEnd < text.length ? text.substring(lineEnd) : '';
+    final String updatedText = beforeSelection + newText + afterSelection;
+
+    // Calculate new cursor position
+    final int newCursorPosition = lineStart + newText.length;
+
+    value = TextEditingValue(
+      text: updatedText,
+      selection: TextSelection.collapsed(offset: newCursorPosition),
+    );
   }
 
   void toggleHeader(int level) {
-    _addFormatTag('${'#' * level} ');
+    _applyStyle(RichTextStyle(headerLevel: level));
+    // _addFormatTag('${'#' * level} ');
   }
 
   void undo() {
@@ -386,45 +502,8 @@ class RichTextEditingController extends TextEditingController {
 // used to decide wither or not to show the link button
   bool get canLink => selection.baseOffset != selection.extentOffset;
 
-  void insertLink(String text, String url) {
-    final TextSelection selection = this.selection;
-    final int start = selection.baseOffset;
-    final int end = selection.extentOffset;
-    final String selectedText = selection.textInside(this.text);
-
-    if (selectedText.isNotEmpty) {
-      // If text is selected, make it a link
-      bloc.add(InsertLinkEvent(selectedText, url, start, end));
-    }
-  }
-
   String getSelectedText() {
     return selection.textInside(text);
-  }
-
-  void removeLink() {
-    final TextSelection selection = this.selection;
-    final RichTextEntity richTextEntity = bloc.state.richTextEntity;
-
-    // Find the link span that contains the cursor or selection
-    final linkSpan = richTextEntity.spans.firstWhere(
-      (span) =>
-          span.style.isLink &&
-          span.originalLinkStart != null &&
-          span.originalLinkEnd != null &&
-          ((span.originalLinkStart! <= selection.start &&
-                  selection.start < span.originalLinkEnd!) ||
-              (span.originalLinkStart! < selection.end && selection.end <= span.originalLinkEnd!)),
-      orElse: () => const RichTextSpan(start: -1, end: -1, style: RichTextStyle()),
-    );
-
-    if (linkSpan.start != -1) {
-      // If a link span is found, remove the link for the entire original link range
-      bloc.add(UnlinkEvent(linkSpan.originalLinkStart!, linkSpan.originalLinkEnd!));
-    } else if (!selection.isCollapsed) {
-      // If there's a selection but it's not entirely within a link, remove any links within the selection
-      bloc.add(UnlinkEvent(selection.start, selection.end));
-    }
   }
 
   void _applyStyle(RichTextStyle style, [TextSelection? initialSelection]) {
@@ -434,7 +513,7 @@ class RichTextEditingController extends TextEditingController {
 
   @override
   void dispose() {
-    bloc.close();
+    // bloc.close();
     super.dispose();
   }
 }

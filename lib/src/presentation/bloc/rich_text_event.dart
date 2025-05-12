@@ -41,24 +41,9 @@ class SaveRichTextEvent extends RichTextEvent {
   const SaveRichTextEvent();
 }
 
-class InsertLinkEvent extends RichTextEvent {
-  final String text;
-  final String url;
-  final int start;
-  final int end;
-
-  const InsertLinkEvent(this.text, this.url, this.start, this.end);
-
+class CaretRequested extends RichTextEvent {
+  final CaretParams params;
+  const CaretRequested(this.params);
   @override
-  List<Object?> get props => [text, url, start, end];
-}
-
-class UnlinkEvent extends RichTextEvent {
-  final int start;
-  final int end;
-
-  const UnlinkEvent(this.start, this.end);
-
-  @override
-  List<Object?> get props => [start, end];
+  List<Object?> get props => [params];
 }
